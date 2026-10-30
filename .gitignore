@@ -1,0 +1,12 @@
+# Executáveis gerados localmente
+flight
+flight.exe
+src/flight
+src/flight.exe
+
+# Artefatos de build
+*.o
+*.exe
+dist/
+flight-linux.zip
+flight-windows.zip
