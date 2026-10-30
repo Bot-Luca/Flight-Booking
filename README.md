@@ -1,7 +1,7 @@
 # Flight Booking
 
 Projeto final da matéria de programação em C usando tudo o que foi aprendido.
-(IA usada apenas para gerar executável)
+*(IA usada apenas para gerar executável)*
 
 
 ## Como executar
