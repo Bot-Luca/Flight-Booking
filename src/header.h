@@ -3,6 +3,7 @@
 
   //Funções iniciais
   void config();
+  void limpar_tela(void);
   int programa();
   int menu();
   
@@ -12,7 +13,7 @@
   int fim();
   
   //funções relacionadas ao voo/avião
-  int voo();
+  void voo(void);
   void info_voo(int infv);
   void painel_embarque();
   void id_aviao(int i);//funções para criar um voo
@@ -29,12 +30,12 @@
   void excluir_voo();//função para excluir voos
   
   //funções relacionadas aos passageiros
-  int passageiros();
+  void passageiros(void);
   void info_usuario(int infu);
   void codigo_usuario(int i);//funções para criar um novo usuário
   void nome_usuario(int i);
   void id_usuario(int i);
-  void endereço_usuario(int i);
+  void endereco_usuario(int i);
   void telefone_usuario(int i);
   void sexo_usuario(int i);
   void novo_usuario();
@@ -44,7 +45,7 @@
   void todos_usuarios();
   
   //funções relacionadas as passagens
-  int passagens();
+  void passagens(void);
   int quantidade_passagens(int i, int ip);//funções para computar uma nova passagem
   void codigo_passagem(int i, int ip);
   void dono_passagem(int i, int ip);

@@ -1,3 +1,7 @@
+#ifdef _WIN32
+#define __USE_MINGW_ANSI_STDIO 1
+#endif
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -55,7 +59,11 @@ config_passagens *passagem;
 
 
 //MAIN
-int main (){
+int main (void){
+#ifdef _WIN32
+  system("chcp 65001 > nul");   //garante acentos e caracteres especiais no Windows
+#endif
+
   //Configurando a função 'rand'
   srand (time(NULL));
 
@@ -73,6 +81,15 @@ void config(){
   aviao = (config_aviao*)calloc(50, sizeof(config_aviao));
   user = (config_passageiros*)calloc(100, sizeof(config_passageiros));
   passagem = (config_passagens*)calloc(50, sizeof(config_passagens));
+}
+
+//Limpa a tela de forma compatível com Windows e Linux
+void limpar_tela(void){
+#ifdef _WIN32
+  system("cls");
+#else
+  system("clear");
+#endif
 }
 
 
@@ -110,11 +127,12 @@ int programa(){
   default:
     programa();  
   }  
+  return 0;
 }
 
 //Imprime o menu do programa
 int menu (){
-  system("clear");
+  limpar_tela();
   
   //Variável que recebe o valor da resposta do usuário
   int r;
@@ -149,7 +167,7 @@ int menu (){
 //SAIR
 //Confirma a saída do usuário do programa
 int sair(){
-  system("clear");
+  limpar_tela();
   
   //Variável que recebe a resposta do usuário
   char r;
@@ -161,7 +179,7 @@ int sair(){
   if (r=='i') return duvida();
   if (r=='s') return 0;
   else if (r=='n') return programa();
-  else sair();
+  else return sair();
 }
 
 //DUVIDA
@@ -170,7 +188,7 @@ int duvida(){
   char d, linha[100];
   FILE *dt;
   
-  system("clear");
+  limpar_tela();
   
   dt = fopen ("texto_filosofico.txt", "r");                         //Abrindo o arquivo no modo leitura
   if (dt==NULL) printf("Não foi possível abrir o arquivo.\n");      //conferindo se foi possível abrir
@@ -187,7 +205,7 @@ int duvida(){
 //FIM
 //Mensagem que aparece ao término do programa
 int fim(){
-  system("clear");
+  limpar_tela();
 
   FILE *ft;
   char linha[100];
@@ -211,10 +229,10 @@ int fim(){
 //CONFERIR VOOS
 //VOO
 //imprime o menu da opção 'conferir vôos'
-int voo(){
+void voo(){
   int rv;
   
-  system("clear");
+  limpar_tela();
   printf("Selecione uma das opções:\n\n");
   printf("1. Cadastrar um novo vôo\n");
   printf("2. Alterar dados de um vôo\n");
@@ -255,7 +273,7 @@ int voo(){
 //INFO_VOO
 //Imprime todas as informações de um voo
 void info_voo(int infv){
-  system("clear");
+  limpar_tela();
   printf ("'Id' do avião:          %d\n", aviao[infv].id_a);
   printf ("Número do voo:          %d\n", aviao[infv].num_voo);
   printf ("Companhia aérea:        %s\n", aviao[infv].empresa);
@@ -281,7 +299,7 @@ void info_voo(int infv){
 //PAINEL_EMBARQUE
 //Imprime o 'painel de embarque'
 void painel_embarque(){
-  system ("clear");
+  limpar_tela();
   printf("                         |             |                 |         \n");
   printf("         Destino         |   Horário   |     Empresa     |   Voo   \n");
   printf("_________________________|_____________|_________________|_________\n");
@@ -360,7 +378,7 @@ void painel_embarque(){
 //NOVO_VOO
 //ID AVIAO
 void id_aviao(int i){
-  system ("clear");
+  limpar_tela();
   char idr;
   printf("'Id' da aeronave\n\nVocê deseja inserir um número aleatório automaticamente?\n");
   printf("(digite 's' para confirmar. Para inserir o número manualmente, digite qualquer outra tecla.)\n\n");
@@ -368,7 +386,7 @@ void id_aviao(int i){
   getchar();
   if (idr=='s') aviao[i].id_a=rand()%90000000 + 10000000;
   else{
-    system ("clear");
+    limpar_tela();
     printf("Digite o 'id' da aeronave:\n(O 'id' possui 8 números!)\n\n");
     scanf("%8d", &aviao[i].id_a);
     getchar();
@@ -378,7 +396,7 @@ void id_aviao(int i){
 
 //NÚMERO DO VOO
 void numero_voo(int i){
-  system ("clear");
+  limpar_tela();
   char numr;
   printf("Número do voo\n\nVocê deseja inserir um número aleatório automaticamente?\n");
   printf("(digite 's' para confirmar. Para inserir o número manualmente, digite qualquer outra tecla.)\n\n");
@@ -386,7 +404,7 @@ void numero_voo(int i){
   getchar();
   if (numr=='s') aviao[i].num_voo=rand()%900 + 100;
   else{
-    system ("clear");
+    limpar_tela();
     printf("Digite o número do voo:\n(O número do vôo possuí 3 números!)\n");
     scanf("%3d", &aviao[i].num_voo);
     getchar();
@@ -396,7 +414,7 @@ void numero_voo(int i){
 
 //EMPRESA (OU COMPANHIA AÉREA)
 void companhia_aerea(int i){
-  system ("clear");
+  limpar_tela();
   char *e;
   e=malloc(100*sizeof(e));
   printf("Digite o nome da companhia aérea:\n");
@@ -410,7 +428,7 @@ void companhia_aerea(int i){
 
 //ORIGEM 
 void origem_voo(int i){
-  system ("clear");
+  limpar_tela();
   char *o;
   o=malloc(100*sizeof(o));
   printf("Digite o nome de onde o voo partiu:\n");
@@ -424,7 +442,7 @@ void origem_voo(int i){
 
 //DESTINO
 void destino_voo(int i){
-  system ("clear");
+  limpar_tela();
   char *d;
   d=malloc(100*sizeof(d));
   printf("Digite o nome para onde o voo se destina:\n");
@@ -438,7 +456,7 @@ void destino_voo(int i){
 
 //DATA
 void data_voo(int i){
-  system ("clear");
+  limpar_tela();
   printf("Digite a data de partida do voo, usando sempre 2 dígitos:\n");
   printf("Dia:"); scanf("%d", &aviao[i].dpartida.dia);
   printf("Mês:"); scanf("%d", &aviao[i].dpartida.mes);
@@ -447,7 +465,7 @@ void data_voo(int i){
 
 //HORÁRIO
 void horario_voo(int i){
-  system ("clear");
+  limpar_tela();
   printf("Digite o horário de partida do voo, usando sempre 2 dígitos:\n");
   printf("Hora  :"); scanf("%d", &aviao[i].hpartida.h);
   printf("Minuto:"); scanf("%d", &aviao[i].hpartida.min);
@@ -455,7 +473,7 @@ void horario_voo(int i){
 
 //MÁXIMO DE PASSAGEIROS
 void max_passageiros(int i){
-  system ("clear");
+  limpar_tela();
   int max;
   printf("Digite a quantidade de passageiros que a aeronave comporta:\n");
   scanf("%d", &max);
@@ -499,7 +517,7 @@ void novo_voo(){
     }
     else if (i==49) {
       char lock;
-      system("clear");
+      limpar_tela();
       printf("Limite de voos atingido!\n(Pressione 'enter' para voltar)\n");
       scanf("%c", &lock);
     }
@@ -510,7 +528,7 @@ void novo_voo(){
 //ALTERAR_VOO
 //Cria um menu para escolher o que se deseja alterar
 void menu_alterar(int i){
-  system("clear");
+  limpar_tela();
   info_voo(i);
   printf("\n\nQual informação você deseja alterar? Selecione uma das opções a baixo:\n\n");
   printf ("0. 'Id' do avião\n");
@@ -582,7 +600,7 @@ void menu_alterar(int i){
 
 //Altera dados que já estavam armazenados em 'aviao[]'
 void alterar_voo(){
-  system("clear");
+  limpar_tela();
   int numv;
   printf("Digite o número do voo que você deseja alterar os dados:\n(Para voltar ao menu, digite '1')\n");
   scanf ("%d", &numv);
@@ -596,7 +614,7 @@ void alterar_voo(){
       }
       else if (i==49) {
         char lock;
-        system("clear");
+        limpar_tela();
         printf("O número não corresponde a nenhum voo!\n(Pressione 'enter' para continuar)\n");
         scanf("%c", &lock);
         alterar_voo();
@@ -608,7 +626,7 @@ void alterar_voo(){
 //EXCLUIR_VOO
 //Passa todos os dados de um voo para 0
 void excluir_voo(){
-  system("clear");
+  limpar_tela();
   int numv;
   printf("Digite o número do voo que você deseja excluir os dados:\n(Para voltar ao menu, digite '1')\n\n");
   scanf ("%d", &numv);
@@ -649,7 +667,7 @@ void excluir_voo(){
       }
       else if (i==49) {
         char lock;
-        system("clear");
+        limpar_tela();
         printf("O número não corresponde a nenhum voo!\n(Pressione 'enter' para voltar a tela anterior)\n");
         scanf("%c", &lock);
         excluir_voo();
@@ -666,10 +684,10 @@ void excluir_voo(){
 
 
 //PASSAGEIROS
-int passageiros(){
+void passageiros(){
   int r;
   
-  system("clear");
+  limpar_tela();
   printf("Selecione uma das opções:\n\n");
   printf("1. Cadastrar um novo passageiro\n");
   printf("2. Alterar dados de um passageiro\n");
@@ -742,7 +760,7 @@ void info_usuario(int infu){
 //NOVO_USUARIO
 //CÓDIGO DO USUÁRIO
 void codigo_usuario(int i){
-  system ("clear");
+  limpar_tela();
   char r;
   printf("Código do passageiro\n\nVocê deseja inserir um número aleatório automaticamente?\n");
   printf("(digite 's' para confirmar. Para inserir o número manualmente, digite qualquer outra tecla.)\n\n");
@@ -750,7 +768,7 @@ void codigo_usuario(int i){
   getchar();
   if (r=='s') user[i].codigo_u=rand()%900 + 100;
   else{
-    system ("clear");
+    limpar_tela();
     printf("Digite o código do passageiro:\n(O código possui 3 números!)\n\n");
     scanf("%3d", &user[i].codigo_u);
     getchar();
@@ -760,7 +778,7 @@ void codigo_usuario(int i){
 
 //NOME DO USUÁRIO
 void nome_usuario(int i){
-  system ("clear");
+  limpar_tela();
   char *n;
   n=malloc(100*sizeof(n));
   printf("Digite o nome do passageiro:\n");
@@ -774,26 +792,26 @@ void nome_usuario(int i){
 
 //ID DO USUÁRIO
 void id_usuario(int i){
-  system ("clear");
+  limpar_tela();
   char r;
   printf("'Id' do passageiro\n\nVocê deseja inserir um número aleatório automaticamente?\n");
   printf("(digite 's' para confirmar. Para inserir o número manualmente, digite qualquer outra tecla.)\n\n");
   scanf("%c", &r);
   getchar();
-  if (r=='s') sprintf(user[i].id_u, "%ld", rand()%90000000000 + 10000000000);
+  if (r=='s') snprintf(user[i].id_u, sizeof(user[i].id_u), "%lld", (long long)(rand() % 90000000000LL + 10000000000LL));
   else{
-    system ("clear");
+    limpar_tela();
     printf("Digite o 'id' do passageiro:\n(O 'id' possui 11 números!)\n\n");
-    scanf("%s", user[i].id_u);
+    scanf("%11s", user[i].id_u);
     getchar();
     int lenidu=strlen(user[i].id_u);
-    if (lenidu<11) for (int i=0; i<(11-lenidu); i++) strcat(user[i].id_u,"0");
+    for (int j=lenidu; j<11; j++) strcat(user[i].id_u, "0");
   }
 }
 
 //ENDEREÇO DO USUÁRIO
-void endereço_usuario(int i){
-  system ("clear");
+void endereco_usuario(int i){
+  limpar_tela();
   char *e;
   e=malloc(100*sizeof(e));
   printf("Digite o endereço do passageiro:\n");
@@ -844,22 +862,22 @@ void endereço_usuario(int i){
 
 //TELEFONE DO USUÁRIO
 void telefone_usuario(int i){
-  system ("clear");
+  limpar_tela();
   char r;
   printf("Número de telefone do passageiro\n\nVocê deseja inserir um número aleatório automaticamente?\n");
   printf("(digite 's' para confirmar. Para inserir o número manualmente, digite qualquer outra tecla.)\n\n");
   scanf("%c", &r);
-  if (r=='s') sprintf(user[i].telefone, "%ld", rand()%9000000000000 + 1000000000000);
+  if (r=='s') snprintf(user[i].telefone, sizeof(user[i].telefone), "%lld", (long long)(rand() % 9000000000000LL + 1000000000000LL));
   else{
-    system ("clear");
+    limpar_tela();
     printf("Digite o telefone do passageiro:\n(Insira apenas números. Coloque o código do país e o DDD!)\n\n");
-    scanf("%s", user[i].telefone);
+    scanf("%13s", user[i].telefone);
   }
 }
 
 //SEXO DO USUÁRIO
 void sexo_usuario(int i){
-  system ("clear");
+  limpar_tela();
   char r;
   printf("Digite o sexo do passageiro:\n");
   printf("(digite 'f' se for 'feminino' e 'm' se for masculino.)\n\n");
@@ -883,7 +901,7 @@ void novo_usuario(){
       id_usuario(i);
       
       //ENDEREÇO
-      endereço_usuario(i);
+      endereco_usuario(i);
       
       //TELEFONE
       telefone_usuario(i);
@@ -893,9 +911,9 @@ void novo_usuario(){
       
       break;
     }
-    else if (i==49) {
+    else if (i==99) {
       char lock;
-      system("clear");
+      limpar_tela();
       printf("Limite de passageiros atingido!\n(Pressione 'enter' para voltar)\n");
       scanf("%c", &lock);
     }
@@ -906,7 +924,7 @@ void novo_usuario(){
 //ALTERAR_USUÁRIO
 //Cria um menu para escolher o que se deseja alterar
 void menu_alterar_u(int i){
-  system("clear");
+  limpar_tela();
   info_usuario(i);
   printf("\n\nQual informação você deseja alterar? Selecione uma das opções a baixo:\n\n");
   printf ("0. Código\n");
@@ -937,7 +955,7 @@ void menu_alterar_u(int i){
       break;
     
     case 3:
-      endereço_usuario(i);
+      endereco_usuario(i);
       menu_alterar_u(i);
       break;
       
@@ -966,7 +984,7 @@ void menu_alterar_u(int i){
 
 //Altera dados que já estavam armazenados em 'aviao[]'
 void alterar_usuario(){
-  system("clear");
+  limpar_tela();
   int numu;
   printf("Digite o número do passageiro que você deseja alterar os dados:\n(Para voltar ao menu, digite '1')\n");
   scanf ("%d", &numu);
@@ -980,7 +998,7 @@ void alterar_usuario(){
       }
       else if (i==99) {
         char lock;
-        system("clear");
+        limpar_tela();
         printf("O número não corresponde a nenhum passageiro!\n(Pressione 'enter' para continuar)\n");
         scanf("%c", &lock);
         alterar_usuario();
@@ -990,7 +1008,7 @@ void alterar_usuario(){
 }
 
 void excluir_usuario(){
-  system("clear");
+  limpar_tela();
   int codigo;
   printf("Digite o código do passageiro você deseja excluir os dados:\n(Para voltar ao menu, digite '1')\n\n");
   scanf ("%d", &codigo);
@@ -1032,7 +1050,7 @@ void excluir_usuario(){
       }
       else if (i==99) {
         char lock;
-        system("clear");
+        limpar_tela();
         printf("O número não corresponde a nenhum voo!\n(Pressione 'enter' para voltar a tela anterior)\n");
         scanf("%c", &lock);
         excluir_usuario();
@@ -1042,7 +1060,7 @@ void excluir_usuario(){
 }
 
 void todos_usuarios(){
-  system("clear");
+  limpar_tela();
   printf("Lista de todos os passageiros cadastrados no sistema:\n\n");
   
   for (int i=0; i<100; i++){
@@ -1067,10 +1085,10 @@ void todos_usuarios(){
 
 
 //PASSAGENS
-int passagens(){
+void passagens(){
   int r;
   
-  system("clear");
+  limpar_tela();
   printf("Selecione uma das opções:\n\n");
   printf("1. Computar uma nova passagem\n");
   printf("2. Alterar dados de uma passagem\n");
@@ -1110,7 +1128,7 @@ int passagens(){
 //NOVA_PASSAGEM
 //QUANTIDADE DE PASSAGENS
 int quantidade_passagens(int i, int ip){
-  system("clear");
+  limpar_tela();
   int max=(aviao[i].qtd_passageiros-ip), qp;
   printf ("Quantas passagens para o voo %d com destino a %s você deseja computar?\n", passagem[i].num_voo_p, aviao[i].destino);
   printf ("(Há %d lugares disponíveis ainda nesse voo!)\n", max);
@@ -1121,21 +1139,21 @@ int quantidade_passagens(int i, int ip){
     printf ("O voo não possui essa quantidade de espaço suficiente!\n");
     printf ("(Pressione qualquer tecla para inserir a quantidade novamente)");
     scanf ("%c", &lock);
-    quantidade_passagens(i, ip);
+    return quantidade_passagens(i, ip);
   }
-  else return qp;
+  return qp;
 }
 
 //CÓDIGO DA PASSAGEM
 void codigo_passagem(int i, int ip){
-  system ("clear");
+  limpar_tela();
   char r;
   printf("Código da passagem\n\nVocê deseja inserir um número aleatório automaticamente?\n");
   printf("(digite 's' para confirmar. Para inserir o número manualmente, digite qualquer outra tecla.)\n\n");
   scanf("%c", &r);
   if (r=='s') passagem[i].pass[ip].codigo_p=rand()%900 + 100;
   else{
-    system ("clear");
+    limpar_tela();
     printf("Digite o código da passagem:\n(O código possui 3 números!)\n\n");
     scanf("%3d", &passagem[i].pass[ip].codigo_p);
     getchar();
@@ -1146,7 +1164,7 @@ void codigo_passagem(int i, int ip){
 //ID DO USUÁRIO DA PASSAGEM
 void dono_passagem(int i, int ip){
   int cp;
-  system("clear");
+  limpar_tela();
   printf("Essa passagem está no nome de qual passageiro?\n");
   printf("(Insira o código do passageiro)\n");
   scanf("%d", &cp);
@@ -1158,7 +1176,7 @@ void dono_passagem(int i, int ip){
       break;
     }
     else if (k==99){
-      system("clear");
+      limpar_tela();
       char r;
       printf("Esse passageiro não consta no sistema!\n");
       printf("Deseja ver a lista de passageiros existentes?\n");
@@ -1174,7 +1192,7 @@ void dono_passagem(int i, int ip){
 
 //VALOR DA PASSAGEM
 void valor_passagem(int i, int ip){
-  system ("clear");
+  limpar_tela();
   char *v;
   v=malloc(50*sizeof(v));
   printf("Digite o valor que foi pago na passagem:\n");
@@ -1189,7 +1207,7 @@ void valor_passagem(int i, int ip){
 
 //DATA DA COMPRA
 void data_compra(int i, int ip){
-  system ("clear");
+  limpar_tela();
   printf("Digite a data da compra das passagens, usando sempre 2 dígitos:\n");
   printf("Dia:"); scanf("%d", &passagem[i].pass[ip].dcompra.dia);
   printf("Mês:"); scanf("%d", &passagem[i].pass[ip].dcompra.mes);
@@ -1200,7 +1218,7 @@ void data_compra(int i, int ip){
 //Cria uma nova passagem usando os dados de config_passagens
 void nova_passagem(){
   int nv, ip, qp;
-  system("clear");
+  limpar_tela();
   printf("Digite o número do voo correspondente a passagem que você deseja computar:\n");
   printf("(Antes de prosseguir, tenha certeza que há voos e passageiros cadastrados!)\n");
   printf("(Para voltar ao menu anterior, digite '1')\n\n");
@@ -1246,7 +1264,7 @@ void nova_passagem(){
       
       else if (i==49) {
         char lock;
-        system("clear");
+        limpar_tela();
         printf("Voo não encontrado!\n");
         printf("Deseja ver o painel de embarque?\n");
         printf("(Digite 's' para confirmar. Digite outra tecla para voltar a tela anterior.)\n\n");
