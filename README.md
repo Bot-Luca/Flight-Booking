@@ -1,10 +1,12 @@
 # Flight Booking
+___
+Projeto final da matéria de programação em C usando tudo o que foi aprendido.
+(IA usada apenas para gerar executável)
 
-Projeto final da matéria de programação em C: um sistema de agência de viagem em modo console, com cadastro de voos, passageiros e passagens.
+___
+## Como executar
 
-## Baixar e executar
-
-Não é necessário compilar nada. Baixe o pacote mais recente na página de [Releases](../../releases):
+Baixe o pacote mais recente na página de [Releases](../../releases):
 
 | Sistema | Arquivo | Como executar |
 | --- | --- | --- |
@@ -13,26 +15,7 @@ Não é necessário compilar nada. Baixe o pacote mais recente na página de [Re
 
 > Os arquivos `.txt` (menu, despedida e texto filosófico) precisam ficar na mesma pasta do executável. Por isso eles são incluídos dentro dos zips.
 
-## Compilar a partir do código
-
-Requisitos: GCC e Make.
-
-```bash
-cd src
-make
-make run
-```
-
-Sem Make:
-
-```bash
-cd src
-gcc -std=c11 -Wall -Wextra -o flight code.c
-./flight
-```
-
-No Windows, o código detecta o sistema automaticamente, usa `cls` para limpar a tela e configura o terminal em UTF-8. O mesmo código-fonte compila em Linux e Windows.
-
+___
 ## Estrutura do projeto
 
 ```text
@@ -46,6 +29,7 @@ src/
 .github/workflows/build.yml
 ```
 
+___
 ## Funcionalidades
 
 - Cadastro, alteração, exclusão e consulta de voos
@@ -53,9 +37,7 @@ src/
 - Cadastro, alteração, exclusão e consulta de passageiros
 - Emissão de passagens
 
-## Integração contínua
-
-O workflow do GitHub Actions compila o projeto a cada push e disponibiliza os pacotes `flight-windows.zip` e `flight-linux.zip` como artefatos. Ao criar uma tag `v*`, os mesmos pacotes são anexados automaticamente a um Release.
+___
 
 ## Créditos
 
