@@ -351,7 +351,7 @@ void painel_embarque(){
     printf("|   %d\n", aviao[i].num_voo);
   }
   
-  int voltar, flag=0;
+  int voltar;
   char resp;
   printf("\n\nPara ver mais informações sobre um voo, digite o seu número.\nPara voltar para a tela anterior, digite '1'.\n\n");
   scanf("%d", &voltar);
@@ -1217,7 +1217,7 @@ void data_compra(int i, int ip){
 
 //Cria uma nova passagem usando os dados de config_passagens
 void nova_passagem(){
-  int nv, ip, qp;
+  int nv, qp;
   limpar_tela();
   printf("Digite o número do voo correspondente a passagem que você deseja computar:\n");
   printf("(Antes de prosseguir, tenha certeza que há voos e passageiros cadastrados!)\n");
