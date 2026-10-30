@@ -1,0 +1,64 @@
+name: build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Instalar compiladores
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc gcc-mingw-w64-x86-64 zip
+
+      - name: Compilar Linux
+        working-directory: src
+        run: gcc -std=c11 -O2 -Wall -Wextra -o flight code.c
+
+      - name: Compilar Windows
+        working-directory: src
+        run: x86_64-w64-mingw32-gcc -std=c11 -O2 -Wall -Wextra -static -o flight.exe code.c
+
+      - name: Teste rápido (Linux)
+        working-directory: src
+        run: printf '5\ns\n' | ./flight
+
+      - name: Empacotar
+        run: |
+          mkdir -p dist/linux dist/windows
+          cp src/flight src/*.txt dist/linux/
+          cp src/flight.exe src/*.txt dist/windows/
+          (cd dist/linux && zip -r ../../flight-linux.zip .)
+          (cd dist/windows && zip -r ../../flight-windows.zip .)
+
+      - name: Disponibilizar pacote Linux
+        uses: actions/upload-artifact@v4
+        with:
+          name: flight-linux
+          path: flight-linux.zip
+          retention-days: 30
+
+      - name: Disponibilizar pacote Windows
+        uses: actions/upload-artifact@v4
+        with:
+          name: flight-windows
+          path: flight-windows.zip
+          retention-days: 30
+
+      - name: Publicar Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            flight-linux.zip
+            flight-windows.zip
